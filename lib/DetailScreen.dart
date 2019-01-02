@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'ImageViewer.dart';
 
 class _DetailScreen extends State<DetailScreen> {
   // This widget is the root of your application.
@@ -21,14 +22,21 @@ class _DetailScreen extends State<DetailScreen> {
             itemBuilder: (context, i) {
               final picInfo = picInfos[i];
               return Center(
-                  child: Column(children: [
-                CachedNetworkImage(
-                    placeholder: new CircularProgressIndicator(),
-                    fit: BoxFit.fitWidth,
-                    imageUrl: picInfo.source),
-                // Image.network(picInfo.source),
-                Text(picInfo.add_intro)
-              ]));
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ImageViewer(picInfo.source)));
+                      },
+                      child: Column(children: [
+                        CachedNetworkImage(
+                            placeholder: new CircularProgressIndicator(),
+                            fit: BoxFit.fitWidth,
+                            imageUrl: picInfo.source),
+                        // Image.network(picInfo.source),
+                        Text(picInfo.add_intro)
+                      ])));
             }));
   }
 

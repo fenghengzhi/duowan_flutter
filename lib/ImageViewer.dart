@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class _ImageViewer extends State<ImageViewer> {
   final source =
@@ -10,20 +11,28 @@ class _ImageViewer extends State<ImageViewer> {
   double startScale = 1;
   double lastOffsetX = 0;
   double lastOffsetY = 0;
+  final String imageUrl;
+  _ImageViewer(this.imageUrl);
   @override
   Widget build(BuildContext context) {
+    print(scale);
     return Scaffold(
         appBar: AppBar(),
         body: GestureDetector(
             // onPanUpdate: panUpdateHandler,
             onScaleUpdate: scaleUpdateHandler,
             onScaleStart: scaleStartHandler,
-            child: Transform.scale(
-                scale: scale,
-                child: Transform.translate(
-                    // transform: new Matrix4.identity()..translate(0),
-                    offset: Offset(offsetX, offsetY),
-                    child: Image.network(source)))));
+            child: Center(
+                child: Container(
+                    child: Transform.scale(
+                        scale: scale,
+                        child: Transform.translate(
+                            // transform: new Matrix4.identity()..translate(0),
+                            offset: Offset(offsetX, offsetY),
+                            child: CachedNetworkImage(
+                                // placeholder: new CircularProgressIndicator(),
+                                // fit: BoxFit.none,
+                                imageUrl: imageUrl)))))));
   }
 
   scaleStartHandler(ScaleStartDetails details) {
@@ -31,7 +40,6 @@ class _ImageViewer extends State<ImageViewer> {
     lastOffsetX = offsetX;
     lastOffsetY = offsetY;
     startScale = scale;
-    
   }
 
   scaleUpdateHandler(ScaleUpdateDetails details) {
@@ -44,29 +52,8 @@ class _ImageViewer extends State<ImageViewer> {
 }
 
 class ImageViewer extends StatefulWidget {
+  final String imageUrl;
+  ImageViewer(this.imageUrl);
   @override
-  _ImageViewer createState() => _ImageViewer();
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: ImageViewer(),
-    );
-  }
+  _ImageViewer createState() => _ImageViewer(imageUrl);
 }

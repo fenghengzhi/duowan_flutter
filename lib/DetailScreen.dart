@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -21,7 +22,11 @@ class _DetailScreen extends State<DetailScreen> {
               final picInfo = picInfos[i];
               return Center(
                   child: Column(children: [
-                Image.network(picInfo.source),
+                CachedNetworkImage(
+                    placeholder: new CircularProgressIndicator(),
+                    fit: BoxFit.fitWidth,
+                    imageUrl: picInfo.source),
+                // Image.network(picInfo.source),
                 Text(picInfo.add_intro)
               ]));
             }));

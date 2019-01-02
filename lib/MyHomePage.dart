@@ -37,11 +37,12 @@ class _MyHomePageState extends State<MyHomePage>
       //   // child: _widgetOptions.elementAt(_selectedIndex),
       //   child: _widgetOptions[_selectedIndex],
       // ),
-      body:PageView(
+      body: PageView(
         controller: _controller,
         children: _widgetOptions,
         physics: NeverScrollableScrollPhysics(),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(

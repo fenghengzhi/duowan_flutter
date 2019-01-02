@@ -1,57 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:html/parser.dart';
+import 'DetailScreen.dart';
+import 'Resource.dart';
+
 
 class _JinrijiongtuState extends State<Jinrijiongtu>
     with AutomaticKeepAliveClientMixin {
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-  List<Post> post = [];
+  List<Resource> resources = [];
   String test = 'init';
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Text(test);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: post.map((p) {
-        final title = p.title;
-        final body = p.body;
-        return Text('$title');
-      }).toList(),
-    );
+    return buildBody();
   }
 
   @override
   void initState() {
     super.initState();
-    // print("initState");
     getData();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    print("didChangeDependencies");
-    // post = [];
-    // getData();
+  Widget buildBody() {
+    return RefreshIndicator(
+        onRefresh: getData,
+        child: ListView.builder(
+            itemCount: 1,
+            itemBuilder: (context, _) {
+              final rightLength = resources.length ~/ 2;
+              final leftLength = (resources.length % 2) + rightLength;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                        children: List.generate(leftLength, (i) => i * 2)
+                            .map(buildItem)
+                            .toList()),
+                    flex: 1,
+                  ),
+                  Expanded(
+                    child: Column(
+                        children: List.generate(leftLength, (i) => i * 2 + 1)
+                            .map(buildItem)
+                            .toList()),
+                    flex: 1,
+                  ),
+                ],
+              );
+            }));
   }
 
-  void getData() async {
+  Widget buildItem(int i) {
+    final p = resources[i];
+    return FlatButton(
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailScreen(title: p.title, id: p.id)));
+      },
+      child: Column(children: [Image.network(p.coverUrl), Text(p.title)]),
+    );
+  }
+
+  Future<void> getData() async {
     final response =
-        await http.get('https://jsonplaceholder.typicode.com/posts/1');
+        await http.get('http://tu.duowan.com/tag/5037.html?offset=0&order=created&math=1');
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON
-      
+      final body = json.decode(response.body);
+      final String html = body["html"];
+
+      final document = parse(html);
+      final liboxes = document.querySelectorAll('li.box');
+      final _resources = liboxes.map((box) {
+        final title = box.querySelector('em a').text;
+        final String coverUrl = box.querySelector('img').attributes['src'];
+        final exp = new RegExp(r"([0-9]*)(?=.html$)");
+        final String href = box.querySelector('a').attributes['href'];
+        final id = exp.stringMatch(href);
+        // ^http:\/\/tu.duowan.com\/gallery\/
+        return Resource(title: title, coverUrl: coverUrl, id: id);
+      }).toList();
+
       setState(() {
-        test = response.body;
+        resources = _resources;
       });
-      // test = response.body;
-      final _post = Post.fromJson(json.decode(response.body));
-      post.add(_post);
     } else {
-      // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
   }
@@ -64,20 +103,3 @@ class Jinrijiongtu extends StatefulWidget {
 
 
 
-class Post {
-  final int userId;
-  final int id;
-  final String title;
-  final String body;
-
-  Post({this.userId, this.id, this.title, this.body});
-
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-      body: json['body'],
-    );
-  }
-}

@@ -3,12 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:html/parser.dart';
 import 'DetailScreen.dart';
+import 'Resource.dart';
 
 class _Zuixinjiongtu extends State<Zuixinjiongtu>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  List<Resource> post = [];
+  List<Resource> resources = [];
   String test = 'init';
   @override
   Widget build(BuildContext context) {
@@ -27,8 +28,8 @@ class _Zuixinjiongtu extends State<Zuixinjiongtu>
         child: ListView.builder(
             itemCount: 1,
             itemBuilder: (context, _) {
-              final rightLength = post.length ~/ 2;
-              final leftLength = (post.length % 2) + rightLength;
+              final rightLength = resources.length ~/ 2;
+              final leftLength = (resources.length % 2) + rightLength;
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +54,7 @@ class _Zuixinjiongtu extends State<Zuixinjiongtu>
   }
 
   Widget buildItem(int i) {
-    final p = post[i];
+    final p = resources[i];
     return FlatButton(
       onPressed: () {
         Navigator.push(
@@ -75,7 +76,7 @@ class _Zuixinjiongtu extends State<Zuixinjiongtu>
 
       final document = parse(html);
       final liboxes = document.querySelectorAll('li.box');
-      final resources = liboxes.map((box) {
+      final _resources = liboxes.map((box) {
         final title = box.querySelector('em a').text;
         final String coverUrl = box.querySelector('img').attributes['src'];
         final exp = new RegExp(r"([0-9]*)(?=.html$)");
@@ -86,7 +87,7 @@ class _Zuixinjiongtu extends State<Zuixinjiongtu>
       }).toList();
 
       setState(() {
-        post = resources;
+        resources = _resources;
       });
     } else {
       throw Exception('Failed to load post');
@@ -97,12 +98,4 @@ class _Zuixinjiongtu extends State<Zuixinjiongtu>
 class Zuixinjiongtu extends StatefulWidget {
   @override
   _Zuixinjiongtu createState() => new _Zuixinjiongtu();
-}
-
-class Resource {
-  final String id;
-  final String title;
-  final String coverUrl;
-
-  Resource({@required this.id, @required this.title, @required this.coverUrl});
 }

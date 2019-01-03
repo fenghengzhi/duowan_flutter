@@ -18,7 +18,9 @@ class _DetailScreen extends State<DetailScreen> {
         ),
         body: Scrollbar(
             child: ListView.builder(
-                itemCount: picInfos.length, itemBuilder: buildItem)));
+                physics: BouncingScrollPhysics(),
+                itemCount: picInfos.length,
+                itemBuilder: buildItem)));
   }
 
   @override
@@ -66,7 +68,7 @@ class _DetailScreen extends State<DetailScreen> {
                   placeholder: new CircularProgressIndicator(),
                   fit: BoxFit.fitWidth,
                   imageUrl: picInfo.source)),
-          Center(child:Text(picInfo.add_intro))
+          Center(child: Text(picInfo.add_intro))
         ]));
   }
 }

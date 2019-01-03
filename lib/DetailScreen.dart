@@ -20,8 +20,7 @@ class _DetailScreen extends State<DetailScreen> {
           title: Text(title),
         ),
         body: ListView.builder(
-            // itemCount: picInfos.length,
-            itemCount: picInfos.length > 0 ? 1 : 0,
+            itemCount: picInfos.length,
             itemBuilder: (context, i) {
               final picInfo = picInfos[i];
               return Center(

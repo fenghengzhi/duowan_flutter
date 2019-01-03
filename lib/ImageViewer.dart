@@ -1,59 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'PicInfo.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class _ImageViewer extends State<ImageViewer> {
-  final source =
-      'https://upload-images.jianshu.io/upload_images/6770730-62b5fa84a90c5ccd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/674/format/webp';
   double offsetX = 0;
   double offsetY = 0;
   double scale = 1;
   Offset startOffset;
   double startScale = 1;
-  double lastOffsetX = 0;
-  double lastOffsetY = 0;
-  final String imageUrl;
-  _ImageViewer(this.imageUrl);
+  double startOffsetX = 0;
+  double startOffsetY = 0;
+
+  final PicInfo picInfo;
+  _ImageViewer(this.picInfo);
   @override
   Widget build(BuildContext context) {
-    print(scale);
     return Scaffold(
         appBar: AppBar(),
-        body: GestureDetector(
-            // onPanUpdate: panUpdateHandler,
-            onScaleUpdate: scaleUpdateHandler,
-            onScaleStart: scaleStartHandler,
-            child: Center(
-                child: Container(
+        body: Center(
+            child: OverflowBox(
+                maxWidth: double.infinity,
+                maxHeight: double.infinity,
+                child: Transform.translate(
+                    offset: Offset(offsetX, offsetY),
                     child: Transform.scale(
                         scale: scale,
-                        child: Transform.translate(
-                            // transform: new Matrix4.identity()..translate(0),
-                            offset: Offset(offsetX, offsetY),
+                        child: GestureDetector(
+                            onDoubleTap: doubleTapHandler,
+                            onScaleUpdate: scaleUpdateHandler,
+                            onScaleStart: scaleStartHandler,
                             child: CachedNetworkImage(
-                                // placeholder: new CircularProgressIndicator(),
-                                // fit: BoxFit.none,
-                                imageUrl: imageUrl)))))));
+                                fit: BoxFit.none,
+                                imageUrl: picInfo.source)))))));
+  }
+
+  doubleTapHandler() {
+    launch(
+        'http://www.duowan.com/mComment/index.html?domain=tu.duowan.com&uniqid=${picInfo.cmt_md5}&url=/');
   }
 
   scaleStartHandler(ScaleStartDetails details) {
     startOffset = details.focalPoint;
-    lastOffsetX = offsetX;
-    lastOffsetY = offsetY;
+    startOffsetX = offsetX;
+    startOffsetY = offsetY;
     startScale = scale;
   }
 
   scaleUpdateHandler(ScaleUpdateDetails details) {
     setState(() {
-      offsetX = lastOffsetX + details.focalPoint.dx - startOffset.dx;
-      offsetY = lastOffsetY + details.focalPoint.dy - startOffset.dy;
+      offsetX = startOffsetX + details.focalPoint.dx - startOffset.dx;
+      offsetY = startOffsetY + details.focalPoint.dy - startOffset.dy;
       scale = startScale * details.scale;
     });
   }
 }
 
 class ImageViewer extends StatefulWidget {
-  final String imageUrl;
-  ImageViewer(this.imageUrl);
+  final PicInfo picInfo;
+  ImageViewer(this.picInfo);
   @override
-  _ImageViewer createState() => _ImageViewer(imageUrl);
+  _ImageViewer createState() => _ImageViewer(picInfo);
 }

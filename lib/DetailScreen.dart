@@ -3,6 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'ImageViewer.dart';
+import 'PicInfo.dart';
+
 
 class _DetailScreen extends State<DetailScreen> {
   // This widget is the root of your application.
@@ -18,7 +20,8 @@ class _DetailScreen extends State<DetailScreen> {
           title: Text(title),
         ),
         body: ListView.builder(
-            itemCount: picInfos.length,
+            // itemCount: picInfos.length,
+            itemCount: picInfos.length > 0 ? 1 : 0,
             itemBuilder: (context, i) {
               final picInfo = picInfos[i];
               return Center(
@@ -27,13 +30,16 @@ class _DetailScreen extends State<DetailScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ImageViewer(picInfo.source)));
+                                builder: (context) => ImageViewer(picInfo)));
                       },
                       child: Column(children: [
-                        CachedNetworkImage(
-                            placeholder: new CircularProgressIndicator(),
-                            fit: BoxFit.fitWidth,
-                            imageUrl: picInfo.source),
+                        AspectRatio(
+                            aspectRatio:
+                                picInfo.file_width / picInfo.file_height,
+                            child: CachedNetworkImage(
+                                placeholder: new CircularProgressIndicator(),
+                                fit: BoxFit.fitWidth,
+                                imageUrl: picInfo.source)),
                         // Image.network(picInfo.source),
                         Text(picInfo.add_intro)
                       ])));
@@ -89,23 +95,4 @@ class DetailScreen extends StatefulWidget {
   DetailScreen({@required this.title, @required this.id});
   @override
   _DetailScreen createState() => new _DetailScreen(title: title, id: id);
-}
-
-class PicInfo {
-  String add_intro;
-  String source;
-  String pic_id;
-  int file_height;
-  int file_width;
-  String cover_url;
-  String cmt_md5;
-  PicInfo(
-      {this.add_intro,
-      this.source,
-      this.pic_id,
-      this.file_height,
-      this.file_width,
-      this.cover_url,
-      this.cmt_md5});
-  // Item({this.id, this.title, this.coverUrl});
 }

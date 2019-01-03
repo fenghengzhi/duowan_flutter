@@ -28,32 +28,32 @@ class _BaseListState extends State<BaseList>
   Widget buildBody() {
     return RefreshIndicator(
         onRefresh: getData,
-        child: ListView.builder(
-            itemCount: 1,
-            itemBuilder: (context, _) {
-              final rightLength = resources.length ~/ 2;
-              final leftLength = (resources.length % 2) + rightLength;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                        children: List.generate(leftLength, (i) => i * 2)
-                            .map(buildItem)
-                            .toList()),
-                    flex: 1,
-                  ),
-                  Expanded(
-                    child: Column(
-                        children: List.generate(leftLength, (i) => i * 2 + 1)
-                            .map(buildItem)
-                            .toList()),
-                    flex: 1,
-                  ),
-                ],
-              );
-            }));
+        child: SingleChildScrollView(child: buildContent()));
+  }
+
+  Widget buildContent() {
+    final rightLength = resources.length ~/ 2;
+    final leftLength = (resources.length % 2) + rightLength;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+              children: List.generate(leftLength, (i) => i * 2)
+                  .map(buildItem)
+                  .toList()),
+          flex: 1,
+        ),
+        Expanded(
+          child: Column(
+              children: List.generate(leftLength, (i) => i * 2 + 1)
+                  .map(buildItem)
+                  .toList()),
+          flex: 1,
+        ),
+      ],
+    );
   }
 
   Widget buildItem(int i) {

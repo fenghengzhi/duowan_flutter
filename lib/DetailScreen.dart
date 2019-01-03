@@ -5,10 +5,7 @@ import 'dart:convert';
 import 'ImageViewer.dart';
 import 'PicInfo.dart';
 
-
 class _DetailScreen extends State<DetailScreen> {
-  // This widget is the root of your application.
-
   final String title;
   final String id;
   _DetailScreen({@required this.title, @required this.id});
@@ -19,30 +16,9 @@ class _DetailScreen extends State<DetailScreen> {
         appBar: AppBar(
           title: Text(title),
         ),
-        body: ListView.builder(
-            itemCount: picInfos.length,
-            itemBuilder: (context, i) {
-              final picInfo = picInfos[i];
-              return Center(
-                  child: FlatButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ImageViewer(picInfo)));
-                      },
-                      child: Column(children: [
-                        AspectRatio(
-                            aspectRatio:
-                                picInfo.file_width / picInfo.file_height,
-                            child: CachedNetworkImage(
-                                placeholder: new CircularProgressIndicator(),
-                                fit: BoxFit.fitWidth,
-                                imageUrl: picInfo.source)),
-                        // Image.network(picInfo.source),
-                        Text(picInfo.add_intro)
-                      ])));
-            }));
+        body: Scrollbar(
+            child: ListView.builder(
+                itemCount: picInfos.length, itemBuilder: buildItem)));
   }
 
   @override
@@ -55,15 +31,9 @@ class _DetailScreen extends State<DetailScreen> {
     final response = await http
         .get('http://tu.duowan.com/index.php?r=show/getByGallery/&gid=$id');
     if (response.statusCode == 200) {
-      print('success');
-      // If server returns an OK response, parse the JSON
       final data = json.decode(response.body);
       final List<dynamic> picInfosJson = data['picInfo'].toList();
       final _picInfos = picInfosJson.map((picInfos) {
-        // print(1);
-        // print('1');
-        // print(picInfos['file_height']);
-
         return PicInfo(
           add_intro: picInfos['add_intro'],
           source: picInfos['source'],
@@ -82,13 +52,26 @@ class _DetailScreen extends State<DetailScreen> {
     }
   }
 
-  Widget buildItem() {
-    return null;
+  Widget buildItem(context, i) {
+    final picInfo = picInfos[i];
+    return FlatButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ImageViewer(picInfo)));
+        },
+        child: Column(children: [
+          AspectRatio(
+              aspectRatio: picInfo.file_width / picInfo.file_height,
+              child: CachedNetworkImage(
+                  placeholder: new CircularProgressIndicator(),
+                  fit: BoxFit.fitWidth,
+                  imageUrl: picInfo.source)),
+          Center(child:Text(picInfo.add_intro))
+        ]));
   }
 }
 
 class DetailScreen extends StatefulWidget {
-  // This widget is the root of your application.
   final String title;
   final String id;
   DetailScreen({@required this.title, @required this.id});

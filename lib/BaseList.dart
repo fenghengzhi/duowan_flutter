@@ -28,7 +28,7 @@ class _BaseListState extends State<BaseList>
   Widget buildBody() {
     return RefreshIndicator(
         onRefresh: getData,
-        child: SingleChildScrollView(child: buildContent()));
+        child: Scrollbar(child: SingleChildScrollView(child: buildContent())));
   }
 
   Widget buildContent() {

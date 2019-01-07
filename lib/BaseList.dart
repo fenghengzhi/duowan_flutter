@@ -5,6 +5,7 @@ import 'package:html/parser.dart';
 import 'DetailScreen.dart';
 import 'Resource.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class _BaseListState extends State<BaseList>
     with AutomaticKeepAliveClientMixin {
@@ -16,62 +17,26 @@ class _BaseListState extends State<BaseList>
 
   @override
   Widget build(BuildContext context) {
-    return buildBody();
+    return RefreshIndicator(
+        onRefresh: getData,
+        child: Scrollbar(
+            child: StaggeredGridView.countBuilder(
+          physics: BouncingScrollPhysics(),
+          primary: false,
+          crossAxisCount: 4,
+          itemCount: resources.length,
+          mainAxisSpacing: 4.0,
+          crossAxisSpacing: 4.0,
+          itemBuilder: (BuildContext context, int index) =>
+              _Item(resources[index]),
+          staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+        )));
   }
 
   @override
   void initState() {
     super.initState();
     getData();
-  }
-
-  Widget buildBody() {
-    return RefreshIndicator(
-        onRefresh: getData,
-        child: Scrollbar(
-            child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(), child: buildContent())));
-  }
-
-  Widget buildContent() {
-    final rightLength = resources.length ~/ 2;
-    final leftLength = (resources.length % 2) + rightLength;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-              children: List.generate(leftLength, (i) => i * 2)
-                  .map(buildItem)
-                  .toList()),
-          flex: 1,
-        ),
-        Expanded(
-          child: Column(
-              children: List.generate(leftLength, (i) => i * 2 + 1)
-                  .map(buildItem)
-                  .toList()),
-          flex: 1,
-        ),
-      ],
-    );
-  }
-
-  Widget buildItem(int i) {
-    final p = resources[i];
-    return FlatButton(
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DetailScreen(title: p.title, id: p.id)));
-      },
-      child: Column(children: [
-        CachedNetworkImage(fit: BoxFit.fitWidth, imageUrl: p.coverUrl),
-        Text(p.title)
-      ]),
-    );
   }
 
   Future<void> getData() async {
@@ -107,4 +72,35 @@ abstract class BaseList extends StatefulWidget {
   _BaseListState createState() => new _BaseListState(getApiUrl());
   @protected
   String getApiUrl();
+}
+
+class IntSize {
+  const IntSize(this.width, this.height);
+
+  final int width;
+  final int height;
+}
+
+class _Item extends StatelessWidget {
+  final IntSize size = IntSize(100, 100);
+  final Resource resource;
+
+  _Item(this.resource);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    DetailScreen(title: resource.title, id: resource.id)));
+      },
+      child: Column(children: [
+        CachedNetworkImage(fit: BoxFit.fitWidth, imageUrl: resource.coverUrl),
+        Text(resource.title)
+      ]),
+    );
+  }
 }

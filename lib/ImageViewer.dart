@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'PicInfo.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class _ImageViewer extends State<ImageViewer> {
   double offsetX = 0;
@@ -36,8 +37,10 @@ class _ImageViewer extends State<ImageViewer> {
   }
 
   doubleTapHandler() {
-    launch(
+    FocusScope.of(context).requestFocus(FocusNode());
+    this._openInWebview(
         'http://www.duowan.com/mComment/index.html?domain=tu.duowan.com&uniqid=${picInfo.cmt_md5}&url=/');
+ 
   }
 
   scaleStartHandler(ScaleStartDetails details) {
@@ -53,6 +56,35 @@ class _ImageViewer extends State<ImageViewer> {
       offsetY = startOffsetY + details.focalPoint.dy - startOffset.dy;
       scale = startScale * details.scale;
     });
+  }
+
+  Future<Null> _openInWebview(String url) async {
+    if (await url_launcher.canLaunch(url)) {
+      print(url);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (ctx) => WebviewScaffold(
+                    initialChild: Center(child: CircularProgressIndicator()),
+                    url: url,
+                    appBar: AppBar(title: Text(url)),
+                  )));
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (ctx) => WebviewScaffold(
+      //           initialChild: Center(child: CircularProgressIndicator()),
+      //           url: url,
+      //           appBar: AppBar(title: Text(url)),
+      //         ),
+      //   ),
+      // );
+    } else {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('URL $url can not be launched.'),
+        ),
+      );
+    }
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'ImageViewer.dart';
 import 'PicInfo.dart';
+import 'VideoPlayer.dart';
 
 class _DetailScreen extends State<DetailScreen> {
   final String title;
@@ -35,15 +36,37 @@ class _DetailScreen extends State<DetailScreen> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List<dynamic> picInfosJson = data['picInfo'].toList();
-      final _picInfos = picInfosJson.map((picInfos) {
+      final _picInfos = picInfosJson.map((picInfo) {
+        String url = picInfo['url'];
+        if (RegExp(r'^\/\/.*$').hasMatch(url)) {
+          url = 'http:' + url;
+        }
+
+        String video_url = picInfo['video_url'];
+        if (RegExp(r'^\/\/.*$').hasMatch(video_url)) {
+          video_url = 'http:' + video_url;
+        }
+
+        String mp4_url = picInfo['mp4_url'];
+        if (RegExp(r'^\/\/.*$').hasMatch(url)) {
+          mp4_url = 'http:' + mp4_url;
+        }
+
+        String cover_url = picInfo['cover_url'];
+        if (RegExp(r'^\/\/.*$').hasMatch(cover_url)) {
+          cover_url = 'http:' + cover_url;
+        }
+
         return PicInfo(
-          add_intro: picInfos['add_intro'],
-          source: picInfos['source'],
-          pic_id: picInfos['pic_id'],
-          file_height: int.parse(picInfos['file_height'].toString()),
-          file_width: int.parse(picInfos['file_width'].toString()),
-          cover_url: picInfos['cover_url'],
-          cmt_md5: picInfos['cmt_md5'],
+          add_intro: picInfo['add_intro'],
+          pic_id: picInfo['pic_id'],
+          file_height: int.parse(picInfo['file_height'].toString()),
+          file_width: int.parse(picInfo['file_width'].toString()),
+          cover_url: cover_url,
+          cmt_md5: picInfo['cmt_md5'],
+          url: url,
+          video_url: video_url,
+          mp4_url: mp4_url,
         );
       }).toList();
       setState(() {
@@ -58,8 +81,17 @@ class _DetailScreen extends State<DetailScreen> {
     final picInfo = picInfos[i];
     return FlatButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ImageViewer(picInfo)));
+          // print(picInfo.mp4_url);
+          // print(picInfo.video_url);
+          if (picInfo.mp4_url.isNotEmpty || picInfo.video_url.isNotEmpty) {
+            // print('videoplayer');
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => VideoPlayer(picInfo)));
+          } else {
+            // print('iamgeviewer');
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ImageViewer(picInfo)));
+          }
         },
         child: Column(children: [
           AspectRatio(
@@ -67,7 +99,7 @@ class _DetailScreen extends State<DetailScreen> {
               child: CachedNetworkImage(
                   placeholder: new CircularProgressIndicator(),
                   fit: BoxFit.fitWidth,
-                  imageUrl: picInfo.source)),
+                  imageUrl: picInfo.url)),
           Center(child: Text(picInfo.add_intro))
         ]));
   }

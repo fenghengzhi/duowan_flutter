@@ -57,6 +57,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
         child: _controller.value.initialized
             ? GestureDetector(
                 onTap: tapHandler,
+                onDoubleTap: doubleTapHandler,
                 child: AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
                   child: vp.VideoPlayer(_controller),

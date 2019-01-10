@@ -81,9 +81,10 @@ class _DetailScreen extends State<DetailScreen> {
     final picInfo = picInfos[i];
     return FlatButton(
         onPressed: () {
+          // print(picInfo.url);
           // print(picInfo.mp4_url);
           // print(picInfo.video_url);
-          if (picInfo.mp4_url.isNotEmpty || picInfo.video_url.isNotEmpty) {
+          if (picInfo.video_url.isNotEmpty) {
             // print('videoplayer');
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => VideoPlayer(picInfo)));

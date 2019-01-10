@@ -66,7 +66,7 @@ class _ViewerState extends State<_Viewer> {
         (details.focalPoint - leftTop) / _scale; //点击的像素距图片左上角坐标（换算成scale=1下）
 
     _offsetX = _offsetX + (origin.dx - _origin.dx) * (_scale - 1.0);
-    
+
     _offsetY = _offsetY + (origin.dy - _origin.dy) * (_scale - 1.0);
 
     _origin = origin;
@@ -85,7 +85,7 @@ class _ViewerState extends State<_Viewer> {
     });
   }
 
-  Future<Null> _openInWebview(String url) async {
+  Future<void> _openInWebview(String url) async {
     if (await url_launcher.canLaunch(url)) {
       // print(url);
       Navigator.push(
@@ -96,15 +96,6 @@ class _ViewerState extends State<_Viewer> {
                     url: url,
                     appBar: AppBar(title: Text(url)),
                   )));
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (ctx) => WebviewScaffold(
-      //           initialChild: Center(child: CircularProgressIndicator()),
-      //           url: url,
-      //           appBar: AppBar(title: Text(url)),
-      //         ),
-      //   ),
-      // );
     } else {
       Scaffold.of(context).showSnackBar(
         SnackBar(

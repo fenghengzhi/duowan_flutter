@@ -9,8 +9,11 @@ import 'VideoPlayer.dart';
 class _DetailScreen extends State<DetailScreen> {
   final String title;
   final String id;
+
   _DetailScreen({@required this.title, @required this.id});
+
   List<PicInfo> picInfos = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +93,9 @@ class _DetailScreen extends State<DetailScreen> {
           AspectRatio(
               aspectRatio: picInfo.file_width / picInfo.file_height,
               child: CachedNetworkImage(
-                  placeholder: new CircularProgressIndicator(),
+                  placeholder: (BuildContext context, String url) {
+                    return new CircularProgressIndicator();
+                  },
                   fit: BoxFit.fitWidth,
                   imageUrl: picInfo.url)),
           Center(child: Text(picInfo.add_intro))
@@ -101,7 +106,9 @@ class _DetailScreen extends State<DetailScreen> {
 class DetailScreen extends StatefulWidget {
   final String title;
   final String id;
+
   DetailScreen({@required this.title, @required this.id});
+
   @override
   _DetailScreen createState() => new _DetailScreen(title: title, id: id);
 }

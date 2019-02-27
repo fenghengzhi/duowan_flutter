@@ -36,37 +36,29 @@ class _DetailScreen extends State<DetailScreen> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List<dynamic> picInfosJson = data['picInfo'].toList();
+      String format(String str) {
+        if (RegExp(r'^\/\/.*$').hasMatch(str)) {
+          return 'http:' + str;
+        } else {
+          return str;
+        }
+      }
+
       final _picInfos = picInfosJson.map((picInfo) {
-        String url = picInfo['url'];
-        if (RegExp(r'^\/\/.*$').hasMatch(url)) {
-          url = 'http:' + url;
-        }
-
-        String video_url = picInfo['video_url'];
-        if (RegExp(r'^\/\/.*$').hasMatch(video_url)) {
-          video_url = 'http:' + video_url;
-        }
-
-        String mp4_url = picInfo['mp4_url'];
-        if (RegExp(r'^\/\/.*$').hasMatch(url)) {
-          mp4_url = 'http:' + mp4_url;
-        }
-
-        String cover_url = picInfo['cover_url'];
-        if (RegExp(r'^\/\/.*$').hasMatch(cover_url)) {
-          cover_url = 'http:' + cover_url;
-        }
+        ['url', 'video_url', 'mp4_url', 'cover_url'].forEach((key) {
+          picInfo[key] = format(picInfo[key]);
+        });
 
         return PicInfo(
           add_intro: picInfo['add_intro'],
           pic_id: picInfo['pic_id'],
           file_height: int.parse(picInfo['file_height'].toString()),
           file_width: int.parse(picInfo['file_width'].toString()),
-          cover_url: cover_url,
+          cover_url: picInfo['cover_url'],
           cmt_md5: picInfo['cmt_md5'],
-          url: url,
-          video_url: video_url,
-          mp4_url: mp4_url,
+          url: picInfo['url'],
+          video_url: picInfo['video_url'],
+          mp4_url: picInfo['mp4_url'],
         );
       }).toList();
       setState(() {

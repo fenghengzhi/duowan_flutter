@@ -6,7 +6,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class ImageViewer extends StatelessWidget {
   final PicInfo picInfo;
+
   ImageViewer(this.picInfo);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(), body: _Viewer(picInfo));
@@ -15,7 +17,9 @@ class ImageViewer extends StatelessWidget {
 
 class _ViewerState extends State<_Viewer> {
   final PicInfo picInfo;
+
   _ViewerState(this.picInfo);
+
   double _scale = 1.0;
   double _startScale = 1.0;
   double _offsetX = 0.0;
@@ -27,6 +31,7 @@ class _ViewerState extends State<_Viewer> {
 
   Offset _origin = Offset(0, 0);
   GlobalKey _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,22 +40,19 @@ class _ViewerState extends State<_Viewer> {
             child: OverflowBox(
                 maxWidth: double.infinity,
                 maxHeight: double.infinity,
-                child: Transform(
-                    origin: _origin,
+                child: Container(
+                    width: picInfo.file_width.toDouble() * _scale,
+                    height: picInfo.file_height.toDouble() * _scale,
                     transform: Matrix4.identity()
-                      ..translate(_offsetX, _offsetY)
-                      ..scale(_scale, _scale),
-                    child: Container(
-                        width: picInfo.file_width.toDouble(),
-                        height: picInfo.file_height.toDouble(),
-                        child: GestureDetector(
-                            onDoubleTap: doubleTapHandler,
-                            onScaleUpdate: scaleUpdateHandler,
-                            onScaleStart: scaleStartHandler,
-                            child: CachedNetworkImage(
-                                key: _key,
-                                fit: BoxFit.fitWidth,
-                                imageUrl: picInfo.url)))))));
+                      ..translate(_offsetX, _offsetY),
+                    child: GestureDetector(
+                        onDoubleTap: doubleTapHandler,
+                        onScaleUpdate: scaleUpdateHandler,
+                        onScaleStart: scaleStartHandler,
+                        child: CachedNetworkImage(
+                            key: _key,
+                            fit: BoxFit.fitWidth,
+                            imageUrl: picInfo.url))))));
   }
 
   doubleTapHandler() {
@@ -108,7 +110,9 @@ class _ViewerState extends State<_Viewer> {
 
 class _Viewer extends StatefulWidget {
   final PicInfo picInfo;
+
   _Viewer(this.picInfo);
+
   @override
   _ViewerState createState() => _ViewerState(picInfo);
 }

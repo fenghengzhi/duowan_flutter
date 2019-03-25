@@ -90,14 +90,17 @@ class _DetailScreen extends State<DetailScreen> {
           }
         },
         child: Column(children: [
-          AspectRatio(
-              aspectRatio: picInfo.file_width / picInfo.file_height,
-              child: CachedNetworkImage(
-                  placeholder: (BuildContext context, String url) {
-                    return new CircularProgressIndicator();
-                  },
-                  fit: BoxFit.fitWidth,
-                  imageUrl: picInfo.url)),
+          // AspectRatio(
+          // aspectRatio: picInfo.file_width / picInfo.file_height,
+          // child:
+          CachedNetworkImage(
+              placeholder: (BuildContext context, String url) {
+                return new CircularProgressIndicator();
+              },
+              fit: BoxFit.fitWidth,
+              width: double.infinity,
+              imageUrl: picInfo.url),
+          // imageUrl: 'https://via.placeholder.com/1000x1000'),
           Center(child: Text(picInfo.add_intro))
         ]));
   }

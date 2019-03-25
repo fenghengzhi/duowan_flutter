@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'PicInfo.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
@@ -41,10 +42,18 @@ class _ViewerState extends State<_Viewer> {
                 maxWidth: double.infinity,
                 maxHeight: double.infinity,
                 child: Container(
-                    width: picInfo.file_width.toDouble() * _scale,
-                    height: picInfo.file_height.toDouble() * _scale,
+//                        width: picInfo.file_width.toDouble() * _scale,
+//                        height: picInfo.file_height.toDouble() * _scale,
+                    width: picInfo.file_width * _scale,
+                    height: picInfo.file_height * _scale,
                     transform: Matrix4.identity()
-                      ..translate(_offsetX, _offsetY),
+                      ..translate(
+                          _offsetX +
+                              (picInfo.file_width / 2 - _origin.dx) *
+                                  (_scale - 1.0),
+                          _offsetY +
+                              (picInfo.file_height / 2 - _origin.dy) *
+                                  (_scale - 1.0)),
                     child: GestureDetector(
                         onDoubleTap: doubleTapHandler,
                         onScaleUpdate: scaleUpdateHandler,
@@ -52,7 +61,11 @@ class _ViewerState extends State<_Viewer> {
                         child: CachedNetworkImage(
                             key: _key,
                             fit: BoxFit.fitWidth,
+//                            width: double.infinity,
+//                            height: double.infinity,
                             imageUrl: picInfo.url))))));
+//                            imageUrl:
+//                                'https://via.placeholder.com/100x100'))))));
   }
 
   doubleTapHandler() {
@@ -66,7 +79,7 @@ class _ViewerState extends State<_Viewer> {
     final leftTop = renderBox.localToGlobal(Offset.zero);
     final origin =
         (details.focalPoint - leftTop) / _scale; //点击的像素距图片左上角坐标（换算成scale=1下）
-
+//    print(origin);
     _offsetX = _offsetX + (origin.dx - _origin.dx) * (_scale - 1.0);
 
     _offsetY = _offsetY + (origin.dy - _origin.dy) * (_scale - 1.0);

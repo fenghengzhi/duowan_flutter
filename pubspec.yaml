@@ -26,6 +26,7 @@ dependencies:
   flutter_staggered_grid_view: any
   flutter_webview_plugin: any
   video_player: any
+  image_gallery_saver: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

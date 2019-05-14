@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'PicInfo.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 
 class ImageViewer extends StatelessWidget {
   final PicInfo picInfo;
@@ -58,9 +63,12 @@ class _ViewerState extends State<_Viewer> {
                         onDoubleTap: doubleTapHandler,
                         onScaleUpdate: scaleUpdateHandler,
                         onScaleStart: scaleStartHandler,
+                        onLongPressStart: _saveToGallery,
                         child: CachedNetworkImage(
                             key: _key,
                             fit: BoxFit.fitWidth,
+                            errorWidget: (context, url, error) =>
+                                new Icon(Icons.error),
 //                            width: double.infinity,
 //                            height: double.infinity,
                             imageUrl: picInfo.url))))));
@@ -118,6 +126,11 @@ class _ViewerState extends State<_Viewer> {
         ),
       );
     }
+  }
+
+  _saveToGallery(LongPressStartDetails details) async {
+    var response = await http.get(picInfo.url);
+    final result = await ImageGallerySaver.save(response.bodyBytes.buffer.asUint8List());
   }
 }
 

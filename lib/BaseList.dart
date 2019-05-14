@@ -98,7 +98,11 @@ class _Item extends StatelessWidget {
                     DetailScreen(title: resource.title, id: resource.id)));
       },
       child: Column(children: [
-        CachedNetworkImage(fit: BoxFit.fitWidth, imageUrl: resource.coverUrl),
+        CachedNetworkImage(
+          fit: BoxFit.fitWidth,
+          imageUrl: resource.coverUrl,
+          errorWidget: (context, url, error) => new Icon(Icons.error),
+        ),
         Text(resource.title)
       ]),
     );

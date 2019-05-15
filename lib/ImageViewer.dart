@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -7,7 +6,6 @@ import 'PicInfo.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 class ImageViewer extends StatelessWidget {
@@ -129,8 +127,16 @@ class _ViewerState extends State<_Viewer> {
   }
 
   _saveToGallery(LongPressStartDetails details) async {
+    Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    Scaffold.of(context).showSnackBar(new SnackBar(
+      content: new Text("尝试保存到相册"),
+    ));
     var response = await http.get(picInfo.url);
     final result = await ImageGallerySaver.save(response.bodyBytes.buffer.asUint8List());
+    print(result);
+    Scaffold.of(context).showSnackBar(new SnackBar(
+      content: new Text("保存到相册成功"),
+    ));
   }
 }
 

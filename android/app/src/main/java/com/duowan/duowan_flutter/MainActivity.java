@@ -1,4 +1,4 @@
-package com.example.duowanflutter;
+package com.duowan.duowan_flutter;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

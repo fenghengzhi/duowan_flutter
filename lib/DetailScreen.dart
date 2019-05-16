@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'CustomCacheManager.dart';
 import 'ImageViewer.dart';
 import 'PicInfo.dart';
 import 'VideoPlayer.dart';
@@ -96,9 +97,13 @@ class _DetailScreen extends State<DetailScreen> {
           // aspectRatio: picInfo.file_width / picInfo.file_height,
           // child:
           CachedNetworkImage(
-              placeholder: (BuildContext context, String url) {
-                return new CircularProgressIndicator();
-              },
+              placeholder: (context, url) => AspectRatio(
+                  aspectRatio: picInfo.file_width / picInfo.file_height,
+                  child: Center(child: CircularProgressIndicator())),
+              errorWidget: (context, url, error) => AspectRatio(
+                  aspectRatio: picInfo.file_width / picInfo.file_height,
+                  child: Icon(Icons.error)),
+              cacheManager: CustomCacheManager(),
               fit: BoxFit.fitWidth,
               width: double.infinity,
               imageUrl: picInfo.url),

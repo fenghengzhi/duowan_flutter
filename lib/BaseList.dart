@@ -107,8 +107,8 @@ class _Item extends StatelessWidget {
           fit: BoxFit.fitWidth,
           imageUrl: resource.coverUrl,
           cacheManager: CustomCacheManager(),
-          placeholder: (context, url) => new CircularProgressIndicator(),
-          errorWidget: (context, url, error) => new Icon(Icons.error),
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         Text(resource.title)
       ]),

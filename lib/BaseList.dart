@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:html/parser.dart';
+import 'package:http/http.dart' as http;
+
+import 'CustomCacheManager.dart';
 import 'DetailScreen.dart';
 import 'Resource.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class _BaseListState extends State<BaseList>
     with AutomaticKeepAliveClientMixin {
@@ -13,6 +16,7 @@ class _BaseListState extends State<BaseList>
   bool get wantKeepAlive => true;
   List<Resource> resources = [];
   final String apiUrl;
+
   _BaseListState(this.apiUrl);
 
   @override
@@ -70,6 +74,7 @@ class _BaseListState extends State<BaseList>
 abstract class BaseList extends StatefulWidget {
   @override
   _BaseListState createState() => new _BaseListState(getApiUrl());
+
   @protected
   String getApiUrl();
 }
@@ -101,6 +106,8 @@ class _Item extends StatelessWidget {
         CachedNetworkImage(
           fit: BoxFit.fitWidth,
           imageUrl: resource.coverUrl,
+          cacheManager: CustomCacheManager(),
+          placeholder: (context, url) => new CircularProgressIndicator(),
           errorWidget: (context, url, error) => new Icon(Icons.error),
         ),
         Text(resource.title)

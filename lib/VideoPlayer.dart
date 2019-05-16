@@ -1,15 +1,18 @@
-import 'package:video_player/video_player.dart' as vp;
 import 'package:flutter/material.dart';
-import 'PicInfo.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
+import 'package:video_player/video_player.dart' as vp;
+
+import 'PicInfo.dart';
 
 class _VideoPlayerState extends State<VideoPlayer> {
   final PicInfo picInfo;
+
   _VideoPlayerState(this.picInfo);
 
   vp.VideoPlayerController _controller;
   bool _isPlaying = false;
+
   @override
   void deactivate() {
     super.deactivate();
@@ -104,6 +107,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
 class VideoPlayer extends StatefulWidget {
   final PicInfo picInfo;
+
   VideoPlayer(this.picInfo);
 
   @override

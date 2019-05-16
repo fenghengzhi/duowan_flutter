@@ -9,6 +9,7 @@ class PicInfo {
   String video_url;
   String mp4_url;
   String cmt_md5;
+
   PicInfo(
       {this.add_intro,
       this.source,
@@ -20,5 +21,5 @@ class PicInfo {
       this.file_width,
       this.cover_url,
       this.cmt_md5});
-  // Item({this.id, this.title, this.coverUrl});
+// Item({this.id, this.title, this.coverUrl});
 }

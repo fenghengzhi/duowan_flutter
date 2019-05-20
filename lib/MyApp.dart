@@ -5,9 +5,8 @@ import 'MyHomePage.dart';
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+  Widget build(BuildContext context) => MaterialApp(
+      title: '多玩图库',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,7 +19,5 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
-    );
-  }
+      home: MyHomePage());
 }

@@ -8,7 +8,7 @@ class MyHomePage extends StatefulWidget {
   // MyHomePage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage>
@@ -32,8 +32,7 @@ class _MyHomePageState extends State<MyHomePage>
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       // body: Center(
       //   // child: _widgetOptions.elementAt(_selectedIndex),
       //   child: _widgetOptions[_selectedIndex],
@@ -43,7 +42,6 @@ class _MyHomePageState extends State<MyHomePage>
         children: _widgetOptions,
         physics: NeverScrollableScrollPhysics(),
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -54,9 +52,7 @@ class _MyHomePageState extends State<MyHomePage>
         currentIndex: _selectedIndex,
         fixedColor: Colors.deepPurple,
         onTap: _onItemTapped,
-      ),
-    );
-  }
+      ));
 
   void _onItemTapped(int index) {
     _controller.jumpToPage(index);

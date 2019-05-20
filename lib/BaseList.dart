@@ -20,22 +20,20 @@ class _BaseListState extends State<BaseList>
   _BaseListState(this.apiUrl);
 
   @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
-        onRefresh: getData,
-        child: Scrollbar(
-            child: StaggeredGridView.countBuilder(
-          physics: BouncingScrollPhysics(),
-          primary: false,
-          crossAxisCount: 4,
-          itemCount: resources.length,
-          mainAxisSpacing: 4.0,
-          crossAxisSpacing: 4.0,
-          itemBuilder: (BuildContext context, int index) =>
-              _Item(resources[index]),
-          staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-        )));
-  }
+  Widget build(BuildContext context) => RefreshIndicator(
+      onRefresh: getData,
+      child: Scrollbar(
+          child: StaggeredGridView.countBuilder(
+        physics: BouncingScrollPhysics(),
+        primary: false,
+        crossAxisCount: 4,
+        itemCount: resources.length,
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
+        itemBuilder: (BuildContext context, int index) =>
+            _Item(resources[index]),
+        staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+      )));
 
   @override
   void initState() {
@@ -55,7 +53,7 @@ class _BaseListState extends State<BaseList>
       final _resources = liboxes.map((box) {
         final title = box.querySelector('em a').text;
         final String coverUrl = box.querySelector('img').attributes['src'];
-        final exp = new RegExp(r"([0-9]*)(?=.html$)");
+        final exp = RegExp(r"([0-9]*)(?=.html$)");
         final String href = box.querySelector('a').attributes['href'];
         final id = exp.stringMatch(href);
         // ^http:\/\/tu.duowan.com\/gallery\/
@@ -73,7 +71,7 @@ class _BaseListState extends State<BaseList>
 
 abstract class BaseList extends StatefulWidget {
   @override
-  _BaseListState createState() => new _BaseListState(getApiUrl());
+  _BaseListState createState() => _BaseListState(getApiUrl());
 
   @protected
   String getApiUrl();
@@ -93,15 +91,12 @@ class _Item extends StatelessWidget {
   _Item(this.resource);
 
   @override
-  Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    DetailScreen(title: resource.title, id: resource.id)));
-      },
+  Widget build(BuildContext context) => FlatButton(
+      onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  DetailScreen(title: resource.title, id: resource.id))),
       child: Column(children: [
         CachedNetworkImage(
           fit: BoxFit.fitWidth,
@@ -111,7 +106,5 @@ class _Item extends StatelessWidget {
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         Text(resource.title)
-      ]),
-    );
-  }
+      ]));
 }

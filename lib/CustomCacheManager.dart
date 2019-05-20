@@ -9,7 +9,7 @@ class CustomCacheManager extends BaseCacheManager {
 
   factory CustomCacheManager() {
     if (_instance == null) {
-      _instance = new CustomCacheManager._();
+      _instance = CustomCacheManager._();
     }
     return _instance;
   }

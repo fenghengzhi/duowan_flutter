@@ -14,9 +14,8 @@ class ImageViewer extends StatelessWidget {
   ImageViewer(this.picInfo);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(), body: _Viewer(picInfo));
-  }
+  Widget build(BuildContext context) =>
+      Scaffold(appBar: AppBar(), body: _Viewer(picInfo));
 }
 
 class _ViewerState extends State<_Viewer> {
@@ -67,7 +66,7 @@ class _ViewerState extends State<_Viewer> {
                             fit: BoxFit.fitWidth,
                             cacheManager: CustomCacheManager(),
                             errorWidget: (context, url, error) =>
-                                new Icon(Icons.error),
+                                Icon(Icons.error),
 //                            width: double.infinity,
 //                            height: double.infinity,
                             imageUrl: picInfo.url))))));
@@ -132,8 +131,8 @@ class _ViewerState extends State<_Viewer> {
 //    final result = await ImageGallerySaver.save(file.readAsBytesSync());
     await Share.file('分享图片', 'esys.png', file.readAsBytesSync(), 'image/*');
 //    print(result);
-    Scaffold.of(context).showSnackBar(new SnackBar(
-      content: new Text("分享"),
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("分享"),
     ));
   }
 }

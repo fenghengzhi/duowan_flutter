@@ -18,17 +18,15 @@ class _DetailScreen extends State<DetailScreen> {
   List<PicInfo> picInfos = [];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: Scrollbar(
-            child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: picInfos.length,
-                itemBuilder: buildItem)));
-  }
+  Widget build(BuildContext context) => Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Scrollbar(
+          child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: picInfos.length,
+              itemBuilder: buildItem)));
 
   @override
   void initState() {
@@ -120,5 +118,5 @@ class DetailScreen extends StatefulWidget {
   DetailScreen({@required this.title, @required this.id});
 
   @override
-  _DetailScreen createState() => new _DetailScreen(title: title, id: id);
+  _DetailScreen createState() => _DetailScreen(title: title, id: id);
 }

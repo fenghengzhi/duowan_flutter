@@ -53,22 +53,18 @@ class _VideoPlayerState extends State<VideoPlayer> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: _controller.value.initialized
-            ? GestureDetector(
-                onTap: tapHandler,
-                onDoubleTap: doubleTapHandler,
-                child: AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: vp.VideoPlayer(_controller),
-                ))
-            : Container(),
-      ),
-    );
-  }
+          child: _controller.value.initialized
+              ? GestureDetector(
+                  onTap: tapHandler,
+                  onDoubleTap: doubleTapHandler,
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: vp.VideoPlayer(_controller),
+                  ))
+              : Container()));
 
   tapHandler() {
     if (_isPlaying) {

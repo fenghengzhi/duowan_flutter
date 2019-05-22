@@ -41,7 +41,7 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
     });
   }
 
-  clearCache() async {
+  _clearCache() async {
     await CustomCacheManager().emptyCache();
     await getCacheSize();
   }
@@ -64,7 +64,7 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
                 ),
                 FlatButton(
                     child: new Text("确认"), onPressed: () async {
-                  await clearCache();
+                  await _clearCache();
                   Navigator.of(context).pop();
                 }),
               ],

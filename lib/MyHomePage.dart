@@ -26,13 +26,13 @@ class _MyHomePageState extends State<MyHomePage>
 
   int _selectedIndex = 0;
 
-  static final settings = Settings();
+  static final _settings = Settings();
 
   final _widgetOptions = [
     Zuixinjiongtu(),
     Jinrijiongtu(),
     Gifjiongtu(),
-    settings
+    _settings
   ];
 
   @override
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage>
     setState(() {
       _selectedIndex = index;
       if (index == 3) {
-        settings.getCacheSize();
+        _settings.getCacheSize();
       }
     });
   }

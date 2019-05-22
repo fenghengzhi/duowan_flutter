@@ -15,7 +15,7 @@ class _DetailScreen extends State<DetailScreen> {
 
   _DetailScreen({@required this.title, @required this.id});
 
-  List<PicInfo> picInfos = [];
+  List<PicInfo> _picInfos = [];
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -25,16 +25,16 @@ class _DetailScreen extends State<DetailScreen> {
       body: Scrollbar(
           child: ListView.builder(
               physics: BouncingScrollPhysics(),
-              itemCount: picInfos.length,
-              itemBuilder: buildItem)));
+              itemCount: _picInfos.length,
+              itemBuilder: _buildItem)));
 
   @override
   void initState() {
     super.initState();
-    getData();
+    _getData();
   }
 
-  void getData() async {
+  void _getData() async {
     final response = await http
         .get('http://tu.duowan.com/index.php?r=show/getByGallery/&gid=$id');
     if (response.statusCode == 200) {
@@ -48,7 +48,7 @@ class _DetailScreen extends State<DetailScreen> {
         }
       }
 
-      final _picInfos = picInfosJson.map((picInfo) {
+      final picInfos = picInfosJson.map((picInfo) {
         ['url', 'video_url', 'mp4_url', 'cover_url'].forEach((key) {
           picInfo[key] = format(picInfo[key]);
         });
@@ -66,15 +66,15 @@ class _DetailScreen extends State<DetailScreen> {
         );
       }).toList();
       setState(() {
-        picInfos = _picInfos;
+        _picInfos = picInfos;
       });
     } else {
       throw Exception('Failed to load post');
     }
   }
 
-  Widget buildItem(context, i) {
-    final picInfo = picInfos[i];
+  Widget _buildItem(context, i) {
+    final picInfo = _picInfos[i];
     return FlatButton(
         onPressed: () {
           // print(picInfo.url);

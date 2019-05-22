@@ -9,19 +9,19 @@ import 'CustomCacheManager.dart';
 import 'PicInfo.dart';
 
 class ImageViewer extends StatelessWidget {
-  final PicInfo picInfo;
+  final PicInfo _picInfo;
 
-  ImageViewer(this.picInfo);
+  ImageViewer(this._picInfo);
 
   @override
   Widget build(BuildContext context) =>
-      Scaffold(appBar: AppBar(), body: _Viewer(picInfo));
+      Scaffold(appBar: AppBar(), body: _Viewer(_picInfo));
 }
 
 class _ViewerState extends State<_Viewer> {
-  final PicInfo picInfo;
+  final PicInfo _picInfo;
 
-  _ViewerState(this.picInfo);
+  _ViewerState(this._picInfo);
 
   double _scale = 1.0;
   double _startScale = 1.0;
@@ -46,20 +46,20 @@ class _ViewerState extends State<_Viewer> {
                 child: Container(
 //                        width: picInfo.file_width.toDouble() * _scale,
 //                        height: picInfo.file_height.toDouble() * _scale,
-                    width: picInfo.file_width * _scale,
-                    height: picInfo.file_height * _scale,
+                    width: _picInfo.file_width * _scale,
+                    height: _picInfo.file_height * _scale,
                     transform: Matrix4.identity()
                       ..translate(
                           _offsetX +
-                              (picInfo.file_width / 2 - _origin.dx) *
+                              (_picInfo.file_width / 2 - _origin.dx) *
                                   (_scale - 1.0),
                           _offsetY +
-                              (picInfo.file_height / 2 - _origin.dy) *
+                              (_picInfo.file_height / 2 - _origin.dy) *
                                   (_scale - 1.0)),
                     child: GestureDetector(
-                        onDoubleTap: doubleTapHandler,
+                        onDoubleTap: _doubleTapHandler,
                         onScaleUpdate: scaleUpdateHandler,
-                        onScaleStart: scaleStartHandler,
+                        onScaleStart: _scaleStartHandler,
                         onLongPressStart: _saveToGallery,
                         child: CachedNetworkImage(
                             key: _key,
@@ -69,18 +69,18 @@ class _ViewerState extends State<_Viewer> {
                                 Icon(Icons.error),
 //                            width: double.infinity,
 //                            height: double.infinity,
-                            imageUrl: picInfo.url))))));
+                            imageUrl: _picInfo.url))))));
 //                            imageUrl:
 //                                'https://via.placeholder.com/100x100'))))));
   }
 
-  doubleTapHandler() {
+  _doubleTapHandler() {
     FocusScope.of(context).requestFocus(FocusNode());
     this._openInWebview(
-        'http://www.duowan.com/mComment/index.html?domain=tu.duowan.com&uniqid=${picInfo.cmt_md5}&url=/');
+        'http://www.duowan.com/mComment/index.html?domain=tu.duowan.com&uniqid=${_picInfo.cmt_md5}&url=/');
   }
 
-  scaleStartHandler(ScaleStartDetails details) {
+  _scaleStartHandler(ScaleStartDetails details) {
     final RenderBox renderBox = _key.currentContext.findRenderObject();
     final leftTop = renderBox.localToGlobal(Offset.zero);
     final origin =
@@ -127,7 +127,7 @@ class _ViewerState extends State<_Viewer> {
   }
 
   _saveToGallery(LongPressStartDetails details) async {
-    final file = await CustomCacheManager().getSingleFile(picInfo.url);
+    final file = await CustomCacheManager().getSingleFile(_picInfo.url);
 //    final result = await ImageGallerySaver.save(file.readAsBytesSync());
     await Share.file('分享图片', 'esys.png', file.readAsBytesSync(), 'image/*');
 //    print(result);
@@ -138,10 +138,10 @@ class _ViewerState extends State<_Viewer> {
 }
 
 class _Viewer extends StatefulWidget {
-  final PicInfo picInfo;
+  final PicInfo _picInfo;
 
-  _Viewer(this.picInfo);
+  _Viewer(this._picInfo);
 
   @override
-  _ViewerState createState() => _ViewerState(picInfo);
+  _ViewerState createState() => _ViewerState(_picInfo);
 }

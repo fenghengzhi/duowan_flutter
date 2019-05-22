@@ -6,9 +6,9 @@ import 'package:video_player/video_player.dart' as vp;
 import 'PicInfo.dart';
 
 class _VideoPlayerState extends State<VideoPlayer> {
-  final PicInfo picInfo;
+  final PicInfo _picInfo;
 
-  _VideoPlayerState(this.picInfo);
+  _VideoPlayerState(this._picInfo);
 
   vp.VideoPlayerController _controller;
   bool _isPlaying = false;
@@ -29,10 +29,10 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void initState() {
     super.initState();
     String videoUrl;
-    if (picInfo.mp4_url.isNotEmpty) {
-      videoUrl = picInfo.mp4_url;
+    if (_picInfo.mp4_url.isNotEmpty) {
+      videoUrl = _picInfo.mp4_url;
     } else {
-      videoUrl = picInfo.video_url;
+      videoUrl = _picInfo.video_url;
     }
 
     _controller = vp.VideoPlayerController.network(videoUrl)
@@ -58,15 +58,15 @@ class _VideoPlayerState extends State<VideoPlayer> {
       body: Center(
           child: _controller.value.initialized
               ? GestureDetector(
-                  onTap: tapHandler,
-                  onDoubleTap: doubleTapHandler,
+                  onTap: _tapHandler,
+                  onDoubleTap: _doubleTapHandler,
                   child: AspectRatio(
                     aspectRatio: _controller.value.aspectRatio,
                     child: vp.VideoPlayer(_controller),
                   ))
               : Container()));
 
-  tapHandler() {
+  _tapHandler() {
     if (_isPlaying) {
       _controller.pause();
     } else {
@@ -74,10 +74,10 @@ class _VideoPlayerState extends State<VideoPlayer> {
     }
   }
 
-  doubleTapHandler() {
+  _doubleTapHandler() {
     FocusScope.of(context).requestFocus(FocusNode());
-    this._openInWebview(
-        'http://www.duowan.com/mComment/index.html?domain=tu.duowan.com&uniqid=${picInfo.cmt_md5}&url=/');
+    _openInWebview(
+        'http://www.duowan.com/mComment/index.html?domain=tu.duowan.com&uniqid=${_picInfo.cmt_md5}&url=/');
   }
 
   _openInWebview(String url) async {
@@ -102,10 +102,10 @@ class _VideoPlayerState extends State<VideoPlayer> {
 }
 
 class VideoPlayer extends StatefulWidget {
-  final PicInfo picInfo;
+  final PicInfo _picInfo;
 
-  VideoPlayer(this.picInfo);
+  VideoPlayer(this._picInfo);
 
   @override
-  _VideoPlayerState createState() => _VideoPlayerState(picInfo);
+  _VideoPlayerState createState() => _VideoPlayerState(_picInfo);
 }

@@ -14,35 +14,35 @@ class _BaseListState extends State<BaseList>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  List<Resource> resources = [];
-  final String apiUrl;
+  List<Resource> _resources = [];
+  final String _apiUrl;
 
-  _BaseListState(this.apiUrl);
+  _BaseListState(this._apiUrl);
 
   @override
   Widget build(BuildContext context) => RefreshIndicator(
-      onRefresh: getData,
+      onRefresh: _getData,
       child: Scrollbar(
           child: StaggeredGridView.countBuilder(
         physics: BouncingScrollPhysics(),
         primary: false,
         crossAxisCount: 4,
-        itemCount: resources.length,
+        itemCount: _resources.length,
         mainAxisSpacing: 4.0,
         crossAxisSpacing: 4.0,
         itemBuilder: (BuildContext context, int index) =>
-            _Item(resources[index]),
+            _Item(_resources[index]),
         staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
       )));
 
   @override
   void initState() {
     super.initState();
-    getData();
+    _getData();
   }
 
-  Future<void> getData() async {
-    final response = await http.get(apiUrl);
+  Future<void> _getData() async {
+    final response = await http.get(_apiUrl);
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON
       final body = json.decode(response.body);
@@ -50,7 +50,7 @@ class _BaseListState extends State<BaseList>
 
       final document = parse(html);
       final liboxes = document.querySelectorAll('li.box');
-      final _resources = liboxes.map((box) {
+      final resources = liboxes.map((box) {
         final title = box.querySelector('em a').text;
         String coverUrl = box.querySelector('img').attributes['src'];
         if (RegExp(r'^\/\/.*$').hasMatch(coverUrl)) {
@@ -64,7 +64,7 @@ class _BaseListState extends State<BaseList>
       }).toList();
 
       setState(() {
-        resources = _resources;
+        _resources = resources;
       });
     } else {
       throw Exception('Failed to load post');
@@ -74,10 +74,10 @@ class _BaseListState extends State<BaseList>
 
 abstract class BaseList extends StatefulWidget {
   @override
-  _BaseListState createState() => _BaseListState(apiUrl);
+  _BaseListState createState() => _BaseListState(_apiUrl);
 
   @protected
-  String apiUrl;
+  String _apiUrl;
 }
 
 class IntSize {
@@ -88,10 +88,9 @@ class IntSize {
 }
 
 class _Item extends StatelessWidget {
-  final IntSize size = IntSize(100, 100);
-  final Resource resource;
+  final Resource _resource;
 
-  _Item(this.resource);
+  _Item(this._resource);
 
   @override
   Widget build(BuildContext context) => FlatButton(
@@ -99,15 +98,15 @@ class _Item extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  DetailScreen(title: resource.title, id: resource.id))),
+                  DetailScreen(title: _resource.title, id: _resource.id))),
       child: Column(children: [
         CachedNetworkImage(
           fit: BoxFit.fitWidth,
-          imageUrl: resource.coverUrl,
+          imageUrl: _resource.coverUrl,
           cacheManager: CustomCacheManager(),
           placeholder: (context, url) => CircularProgressIndicator(),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
-        Text(resource.title)
+        Text(_resource.title)
       ]));
 }

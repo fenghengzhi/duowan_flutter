@@ -36,7 +36,9 @@ class CustomCacheManager extends BaseCacheManager {
     }
     final stats = await Future.wait(
         list.map((fileSystemEntity) => fileSystemEntity.stat()));
-    final sizes = stats.map((stat) => stat.size);
+    final fileStats =
+        stats.where((stat) => stat.type == FileSystemEntityType.file);
+    final sizes = fileStats.map((stat) => stat.size);
     final size = sizes.reduce((a, b) => a + b);
     print(size);
     return size;

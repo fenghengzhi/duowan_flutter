@@ -74,10 +74,10 @@ class _BaseListState extends State<BaseList>
 
 abstract class BaseList extends StatefulWidget {
   @override
-  _BaseListState createState() => _BaseListState(_apiUrl);
+  _BaseListState createState() => _BaseListState(apiUrl);
 
   @protected
-  String _apiUrl;
+  String apiUrl;
 }
 
 class IntSize {

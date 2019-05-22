@@ -1,6 +1,7 @@
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class CustomCacheManager extends BaseCacheManager {
   static const key = "customCache";
@@ -16,10 +17,21 @@ class CustomCacheManager extends BaseCacheManager {
 
   CustomCacheManager._()
       : super(key,
-            maxAgeCacheObject: Duration(days: 30), maxNrOfCacheObjects: 2000);
+            maxAgeCacheObject: Duration(days: 30),
+            maxNrOfCacheObjects: 20000);
 
-  Future<String> getFilePath() async {
+  getFilePath() async {
     var directory = await getTemporaryDirectory();
     return p.join(directory.path, key);
+  }
+
+  getSize() async {
+    final path = await getFilePath();
+    print(path);
+//    final directory = Directory(path);
+//    directory.
+    final stat = await Directory(path).stat();
+    print(stat);
+    return stat.size;
   }
 }

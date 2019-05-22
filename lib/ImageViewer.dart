@@ -106,7 +106,7 @@ class _ViewerState extends State<_Viewer> {
     });
   }
 
-  Future<void> _openInWebview(String url) async {
+  _openInWebview(String url) async {
     if (await url_launcher.canLaunch(url)) {
       // print(url);
       Navigator.push(

@@ -52,7 +52,10 @@ class _BaseListState extends State<BaseList>
       final liboxes = document.querySelectorAll('li.box');
       final _resources = liboxes.map((box) {
         final title = box.querySelector('em a').text;
-        final String coverUrl = box.querySelector('img').attributes['src'];
+        String coverUrl = box.querySelector('img').attributes['src'];
+        if (RegExp(r'^\/\/.*$').hasMatch(coverUrl)) {
+          coverUrl = 'http:' + coverUrl;
+        }
         final exp = RegExp(r"([0-9]*)(?=.html$)");
         final String href = box.querySelector('a').attributes['href'];
         final id = exp.stringMatch(href);
@@ -71,10 +74,10 @@ class _BaseListState extends State<BaseList>
 
 abstract class BaseList extends StatefulWidget {
   @override
-  _BaseListState createState() => _BaseListState(getApiUrl());
+  _BaseListState createState() => _BaseListState(apiUrl);
 
   @protected
-  String getApiUrl();
+  String apiUrl;
 }
 
 class IntSize {

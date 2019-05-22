@@ -80,7 +80,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
         'http://www.duowan.com/mComment/index.html?domain=tu.duowan.com&uniqid=${picInfo.cmt_md5}&url=/');
   }
 
-  Future<void> _openInWebview(String url) async {
+  _openInWebview(String url) async {
     if (await url_launcher.canLaunch(url)) {
       // print(url);
       Navigator.push(

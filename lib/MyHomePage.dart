@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'Gifjiongtu.dart';
 import 'Jinrijiongtu.dart';
+import 'Settings.dart';
 import 'Zuixinjiongtu.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -24,11 +25,14 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   int _selectedIndex = 0;
+
+  static final settings = Settings();
+
   final _widgetOptions = [
     Zuixinjiongtu(),
     Jinrijiongtu(),
     Gifjiongtu(),
-    Gifjiongtu()
+    settings
   ];
 
   @override
@@ -47,17 +51,22 @@ class _MyHomePageState extends State<MyHomePage>
           BottomNavigationBarItem(
               icon: Icon(Icons.fiber_new), title: Text('最新囧图')),
           BottomNavigationBarItem(icon: Icon(Icons.today), title: Text('今日囧图')),
-          BottomNavigationBarItem(icon: Icon(Icons.gif), title: Text('GIF囧图'))
+          BottomNavigationBarItem(icon: Icon(Icons.gif), title: Text('GIF囧图')),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('设置')),
         ],
         currentIndex: _selectedIndex,
         fixedColor: Colors.deepPurple,
         onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
       ));
 
   void _onItemTapped(int index) {
     _controller.jumpToPage(index);
     setState(() {
       _selectedIndex = index;
+      if (index == 3) {
+        settings.getCacheSize();
+      }
     });
   }
 }

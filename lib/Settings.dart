@@ -11,19 +11,18 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
   _Settings();
 
   @override
-  Widget build(BuildContext context) =>
-      Scrollbar(
+  Widget build(BuildContext context) => Scrollbar(
           child: ListView(
-            children: <Widget>[
-              ListTile(
-                title: Text('清除缓存'),
-                subtitle: Text('${(_size / 1024).toStringAsFixed(2)}mb'),
-                trailing: Icon(Icons.chevron_right),
-                onTap: _showDialog,
-              ),
-              Divider()
-            ],
-          ));
+        children: <Widget>[
+          ListTile(
+            title: Text('清除缓存'),
+            subtitle: Text('${(_size / 1024 / 1024).toStringAsFixed(2)}mb'),
+            trailing: Icon(Icons.chevron_right),
+            onTap: _showDialog,
+          ),
+          Divider()
+        ],
+      ));
 
   @override
   void initState() {
@@ -50,23 +49,21 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
     // flutter defined function
     showDialog(
         context: context,
-        builder: (BuildContext context) =>
-            AlertDialog(
+        builder: (BuildContext context) => AlertDialog(
               title: new Text("确认清除缓存吗？"),
 //          content: new Text("Alert Dialog body"),
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
                 FlatButton(
                   child: new Text("取消"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
                 FlatButton(
-                    child: new Text("确认"), onPressed: () async {
-                  await _clearCache();
-                  Navigator.of(context).pop();
-                }),
+                    child: new Text("确认"),
+                    onPressed: () async {
+                      await _clearCache();
+                      Navigator.of(context).pop();
+                    }),
               ],
             ));
   }

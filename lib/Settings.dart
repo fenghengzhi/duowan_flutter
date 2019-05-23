@@ -1,14 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'CustomCacheManager.dart';
+import 'MyApp.dart';
 import 'MyHomePage.dart';
 
 class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-
+  final _subscriptions = <StreamSubscription>[];
   int _size = 0;
 
   _Settings();
@@ -23,27 +25,36 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
             trailing: Icon(Icons.chevron_right),
             onTap: _showDialog,
           ),
+          Divider(),
+          ListTile(
+            title: Text('暗黑模式'),
+            trailing: Observer(
+                builder: (_) => Switch(
+                      value: MyApp.store.darkTheme,
+                      onChanged: (_) => MyApp.store.changeTheme(),
+                    )),
+            onTap: _showDialog,
+          ),
           Divider()
         ],
       ));
-  StreamSubscription _subscription;
 
   @override
   void initState() {
     super.initState();
-    getCacheSize();
-    _subscription = MyHomePage.bottomNavigationEvent.stream
+    _getCacheSize();
+    _subscriptions.add(MyHomePage.bottomNavigationEvent.stream
         .where((index) => index == 3)
-        .listen((_) => getCacheSize());
+        .listen((_) => _getCacheSize()));
   }
 
   @override
   void dispose() {
     super.dispose();
-    _subscription.cancel();
+    _subscriptions.forEach((_subscription) => _subscription.cancel());
   }
 
-  getCacheSize() async {
+  _getCacheSize() async {
     final size = await CustomCacheManager().getSize();
     setState(() {
       _size = size;
@@ -52,10 +63,10 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
 
   _clearCache() async {
     await CustomCacheManager().emptyCache();
-    await getCacheSize();
+    await _getCacheSize();
   }
 
-  void _showDialog() {
+  _showDialog() {
     // flutter defined function
     showDialog(
         context: context,

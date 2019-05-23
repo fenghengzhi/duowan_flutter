@@ -30,12 +30,19 @@ dependencies:
   video_player: any
   esys_flutter_share: any
   rxdart: any
+  shared_preferences: any
+  mobx: any
+  flutter_mobx: any
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  build_runner: any
+  mobx_codegen: any
 
 
 # For information on the generic Dart part of this file, see the

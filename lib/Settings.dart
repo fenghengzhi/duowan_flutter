@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'CustomCacheManager.dart';
+import 'MyHomePage.dart';
 
 class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
   @override
@@ -23,18 +26,25 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
           Divider()
         ],
       ));
+  StreamSubscription _subscription;
 
   @override
   void initState() {
-    print('initState');
     super.initState();
     getCacheSize();
+    _subscription = MyHomePage.bottomNavigationEvent.stream
+        .where((index) => index == 3)
+        .listen((_) => getCacheSize());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription.cancel();
   }
 
   getCacheSize() async {
-    print('getCacheSize');
     final size = await CustomCacheManager().getSize();
-    print('cacheSize${size}');
     setState(() {
       _size = size;
     });
@@ -70,21 +80,6 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
 }
 
 class Settings extends StatefulWidget {
-  Settings();
-
-  static _Settings _instance;
-
   @override
-  _Settings createState() {
-    _instance = _Settings();
-    return _instance;
-  }
-
-  getCacheSize() async {
-    if (_instance != null) {
-      _instance.getCacheSize();
-    } else {
-      print('instance null');
-    }
-  }
+  _Settings createState() => _Settings();
 }

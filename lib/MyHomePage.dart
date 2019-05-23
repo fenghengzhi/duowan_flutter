@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart/subjects.dart';
 
 import 'Gifjiongtu.dart';
 import 'Jinrijiongtu.dart';
@@ -7,9 +8,11 @@ import 'Zuixinjiongtu.dart';
 
 class MyHomePage extends StatefulWidget {
   // MyHomePage({Key key}) : super(key: key);
+  static final bottomNavigationEvent = PublishSubject<int>();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
+
 }
 
 class _MyHomePageState extends State<MyHomePage>
@@ -26,13 +29,11 @@ class _MyHomePageState extends State<MyHomePage>
 
   int _selectedIndex = 0;
 
-  static final _settings = Settings();
-
   final _widgetOptions = [
     Zuixinjiongtu(),
     Jinrijiongtu(),
     Gifjiongtu(),
-    _settings
+    Settings()
   ];
 
   @override
@@ -52,7 +53,8 @@ class _MyHomePageState extends State<MyHomePage>
               icon: Icon(Icons.fiber_new), title: Text('最新囧图')),
           BottomNavigationBarItem(icon: Icon(Icons.today), title: Text('今日囧图')),
           BottomNavigationBarItem(icon: Icon(Icons.gif), title: Text('GIF囧图')),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('设置')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), title: Text('设置')),
         ],
         currentIndex: _selectedIndex,
         fixedColor: Colors.deepPurple,
@@ -64,9 +66,7 @@ class _MyHomePageState extends State<MyHomePage>
     _controller.jumpToPage(index);
     setState(() {
       _selectedIndex = index;
-      if (index == 3) {
-        _settings.getCacheSize();
-      }
+      MyHomePage.bottomNavigationEvent.add(index);
     });
   }
 }

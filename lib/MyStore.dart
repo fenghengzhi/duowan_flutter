@@ -19,7 +19,7 @@ abstract class MyStoreBase implements Store {
   bool darkTheme = false;
 
   @action
-  void changeTheme() async {
+  changeTheme() async {
     darkTheme = !darkTheme;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('darkTheme', darkTheme);

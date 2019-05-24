@@ -25,10 +25,15 @@ mixin _$MyStore on MyStoreBase, Store {
     _$darkThemeAtom.reportChanged();
   }
 
-  final _$changeThemeAsyncAction = AsyncAction('changeTheme');
+  final _$MyStoreBaseActionController = ActionController(name: 'MyStoreBase');
 
   @override
-  Future changeTheme() {
-    return _$changeThemeAsyncAction.run(() => super.changeTheme());
+  dynamic setTheme(dynamic _darkTheme) {
+    final _$actionInfo = _$MyStoreBaseActionController.startAction();
+    try {
+      return super.setTheme(_darkTheme);
+    } finally {
+      _$MyStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 }

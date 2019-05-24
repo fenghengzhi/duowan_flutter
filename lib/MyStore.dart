@@ -12,15 +12,19 @@ abstract class MyStoreBase implements Store {
 
   _init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    darkTheme = prefs.getBool('darkTheme');
+    setTheme(prefs.getBool('darkTheme'));
   }
 
   @observable
   bool darkTheme = false;
 
   @action
+  setTheme(_darkTheme) {
+    darkTheme = _darkTheme;
+  }
+
   changeTheme() async {
-    darkTheme = !darkTheme;
+    setTheme(!darkTheme);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('darkTheme', darkTheme);
   }

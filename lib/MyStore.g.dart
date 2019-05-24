@@ -28,10 +28,10 @@ mixin _$MyStore on MyStoreBase, Store {
   final _$MyStoreBaseActionController = ActionController(name: 'MyStoreBase');
 
   @override
-  dynamic setTheme(dynamic _darkTheme) {
+  dynamic _setTheme(dynamic _darkTheme) {
     final _$actionInfo = _$MyStoreBaseActionController.startAction();
     try {
-      return super.setTheme(_darkTheme);
+      return super._setTheme(_darkTheme);
     } finally {
       _$MyStoreBaseActionController.endAction(_$actionInfo);
     }

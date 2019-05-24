@@ -28,12 +28,9 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
           Divider(),
           ListTile(
             title: Text('暗黑模式'),
-            trailing: Observer(
-                builder: (_) => Switch(
-                      value: MyApp.store.darkTheme,
-                      onChanged: (_) => MyApp.store.changeTheme(),
-                    )),
-            onTap: _showDialog,
+            trailing:
+                Observer(builder: (_) => Switch(value: MyApp.store.darkTheme)),
+            onTap: MyApp.store.changeTheme,
           ),
           Divider()
         ],

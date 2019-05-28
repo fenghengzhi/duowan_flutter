@@ -25,14 +25,13 @@ class _BaseListState extends State<BaseList>
       child: Scrollbar(
           child: StaggeredGridView.countBuilder(
         physics: BouncingScrollPhysics(),
-        primary: false,
-        crossAxisCount: 4,
+        crossAxisCount: 2,
         itemCount: _resources.length,
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
+//        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 0,
         itemBuilder: (BuildContext context, int index) =>
             _Item(_resources[index]),
-        staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+        staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
       )));
 
   @override
@@ -77,7 +76,7 @@ abstract class BaseList extends StatefulWidget {
   _BaseListState createState() => _BaseListState(apiUrl);
 
   @protected
-  String apiUrl;
+  final String apiUrl = '';
 }
 
 class IntSize {

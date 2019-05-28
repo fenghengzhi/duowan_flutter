@@ -26,7 +26,7 @@ class _DetailScreen extends State<DetailScreen> {
           child: ListView.builder(
               physics: BouncingScrollPhysics(),
               itemCount: _picInfos.length,
-              itemBuilder: _buildItem)));
+              itemBuilder: (context, i) => _Item(_picInfos[i]))));
 
   @override
   void initState() {
@@ -72,9 +72,15 @@ class _DetailScreen extends State<DetailScreen> {
       throw Exception('Failed to load post');
     }
   }
+}
 
-  Widget _buildItem(context, i) {
-    final picInfo = _picInfos[i];
+class _Item extends StatelessWidget {
+  const _Item(this.picInfo);
+
+  final PicInfo picInfo;
+
+  @override
+  Widget build(BuildContext context) {
     return FlatButton(
         onPressed: () {
           // print(picInfo.url);

@@ -14,7 +14,8 @@ abstract class _MyStore with Store {
 
   _init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _setTheme(prefs.getBool('darkTheme'));
+    final darkTheme = prefs.getBool('darkTheme');
+    _setTheme(darkTheme == null ? false : darkTheme);
   }
 
   @observable

@@ -3,16 +3,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 part 'MyStore.g.dart';
 
-class MyStore = MyStoreBase with _$MyStore;
+// This is the class used by rest of your codebase
+class MyStore = _MyStore with _$MyStore;
 
-abstract class MyStoreBase implements Store {
-  MyStoreBase() {
+// The store-class
+abstract class _MyStore with Store {
+  _MyStore() {
     _init();
   }
 
   _init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _setTheme(prefs.getBool('darkTheme') || false);
+    _setTheme(prefs.getBool('darkTheme'));
   }
 
   @observable

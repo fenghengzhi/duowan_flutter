@@ -42,26 +42,31 @@ class _BaseListState extends State<BaseList>
 
   Future<void> _getData() async {
     final response = await http.get(_apiUrl);
+    print(_apiUrl);
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON
       final body = json.decode(response.body);
       final String html = body["html"];
-
+      print(html);
       final document = parse(html);
-      final liboxes = document.querySelectorAll('li.box');
+      final liboxes = document.querySelectorAll('li[class=box]');
+      print('liboxeslength');
+      print(liboxes.length);
       final resources = liboxes.map((box) {
+        final titleElement = box.querySelector('em a');
+
         final title = box.querySelector('em a').text;
         String coverUrl = box.querySelector('img').attributes['src'];
         if (RegExp(r'^\/\/.*$').hasMatch(coverUrl)) {
           coverUrl = 'http:' + coverUrl;
         }
-        final exp = RegExp(r"([0-9]*)(?=.html$)");
+        final exp = RegExp(r"(\d*)(?=.html$)");
         final String href = box.querySelector('a').attributes['href'];
         final id = exp.stringMatch(href);
         // ^http:\/\/tu.duowan.com\/gallery\/
         return Resource(title: title, coverUrl: coverUrl, id: id);
       }).toList();
-
+      print(resources);
       setState(() {
         _resources = resources;
       });

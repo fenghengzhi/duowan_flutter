@@ -42,16 +42,16 @@ class _BaseListState extends State<BaseList>
 
   Future<void> _getData() async {
     final response = await http.get(_apiUrl);
-    print(_apiUrl);
+//    print(_apiUrl);
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON
       final body = json.decode(response.body);
       final String html = body["html"];
-      print(html);
+//      print(html);
       final document = parse(html);
       final liboxes = document.querySelectorAll('li[class=box]');
-      print('liboxeslength');
-      print(liboxes.length);
+//      print('liboxeslength');
+//      print(liboxes.length);
       final resources = liboxes.map((box) {
         final titleElement = box.querySelector('em a');
 
@@ -66,7 +66,7 @@ class _BaseListState extends State<BaseList>
         // ^http:\/\/tu.duowan.com\/gallery\/
         return Resource(title: title, coverUrl: coverUrl, id: id);
       }).toList();
-      print(resources);
+//      print(resources);
       setState(() {
         _resources = resources;
       });

@@ -17,3 +17,6 @@ samples, guidance on mobile development, and a full API reference.
 
 prebuild command
 flutter packages pub run build_runner build mobx_codegen
+
+
+flutter build apk --target-platform android-arm,android-arm64 --split-per-abi

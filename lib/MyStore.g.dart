@@ -6,7 +6,7 @@ part of 'MyStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MyStore on _MyStore, Store {
   final _$darkThemeAtom = Atom(name: '_MyStore.darkTheme');
@@ -29,7 +29,7 @@ mixin _$MyStore on _MyStore, Store {
   final _$_MyStoreActionController = ActionController(name: '_MyStore');
 
   @override
-  dynamic _setTheme(dynamic _darkTheme) {
+  dynamic _setTheme(bool _darkTheme) {
     final _$actionInfo = _$_MyStoreActionController.startAction();
     try {
       return super._setTheme(_darkTheme);

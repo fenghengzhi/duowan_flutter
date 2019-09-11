@@ -22,7 +22,7 @@ abstract class _MyStore with Store {
   bool darkTheme = false;
 
   @action
-  _setTheme(_darkTheme) {
+  _setTheme(bool _darkTheme) {
     darkTheme = _darkTheme;
   }
 

@@ -29,22 +29,16 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void initState() {
     super.initState();
     String videoUrl;
+    print(_picInfo);
     if (_picInfo.mp4_url.isNotEmpty) {
       videoUrl = _picInfo.mp4_url;
     } else {
       videoUrl = _picInfo.video_url;
     }
+    print(videoUrl);
 
     _controller = vp.VideoPlayerController.network(videoUrl)
       ..setLooping(true)
-      ..addListener(() {
-        final bool isPlaying = _controller.value.isPlaying;
-        if (isPlaying != _isPlaying) {
-          setState(() {
-            _isPlaying = isPlaying;
-          });
-        }
-      })
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         // _controller.play();

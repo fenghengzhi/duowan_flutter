@@ -11,7 +11,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   _VideoPlayerState(this._picInfo);
 
   vp.VideoPlayerController _controller;
-  bool _isPlaying = false;
+//  bool _isPlaying = false;
 
   @override
   void deactivate() {
@@ -61,7 +61,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
               : Container()));
 
   _tapHandler() {
-    if (_isPlaying) {
+    if (_controller.value.isPlaying) {
       _controller.pause();
     } else {
       _controller.play();

@@ -39,7 +39,7 @@ class CustomCacheManager extends BaseCacheManager {
     final fileStats =
         stats.where((stat) => stat.type == FileSystemEntityType.file);
     final sizes = fileStats.map((stat) => stat.size);
-    final size = sizes.reduce((a, b) => a + b);
+    final size = sizes.isEmpty ? 0 : sizes.reduce((v, e) => v + e);
     print(size);
     return size;
   }

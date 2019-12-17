@@ -80,8 +80,13 @@ abstract class BaseList extends StatefulWidget {
   @override
   _BaseListState createState() => _BaseListState(apiUrl);
 
+//  @protected
+//  String get apiUrl => '';
   @protected
   final String apiUrl = '';
+
+//  @protected
+//  static const String st;
 }
 
 class IntSize {

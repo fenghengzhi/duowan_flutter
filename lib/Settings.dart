@@ -65,23 +65,22 @@ class _Settings extends State<Settings> with AutomaticKeepAliveClientMixin {
   }
 
   _showDialog() {
-    // flutter defined function
     showDialog(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
+        builder: (BuildContext dialogContext) => AlertDialog(
               title: new Text("确认清除缓存吗？"),
 //          content: new Text("Alert Dialog body"),
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
                 FlatButton(
                   child: new Text("取消"),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Navigator.of(dialogContext).pop(),
                 ),
                 FlatButton(
                     child: new Text("确认"),
                     onPressed: () async {
                       await _clearCache();
-                      Navigator.of(context).pop();
+                      Navigator.of(dialogContext).pop();
                     }),
               ],
             ));

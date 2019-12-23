@@ -60,9 +60,11 @@ class _BaseListState extends State<BaseList>
         if (RegExp(r'^\/\/.*$').hasMatch(coverUrl)) {
           coverUrl = 'http:' + coverUrl;
         }
-        final exp = RegExp(r"(\d*)(?=.html$)");
+//        final exp = RegExp(r"(\d*)(?=\.html$)");
+        final exp = new RegExp(r"(?<=^http:\/\/tu\.duowan\.com\/gallery\/)(\d*)(?=.html$)");
         final String href = box.querySelector('a').attributes['href'];
         final id = exp.stringMatch(href);
+        print(id);
         // ^http:\/\/tu.duowan.com\/gallery\/
         return Resource(title: title, coverUrl: coverUrl, id: id);
       }).toList();
